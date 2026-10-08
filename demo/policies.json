@@ -1,0 +1,4 @@
+[
+ {"id":"SYN-PROC-001","title":"Synthetic reorder review","keywords":["estoque","reposição","compras","itens"],"text":"When synthetic stock is below the reorder point, review open purchase quantities and the sandbox lead time before proposing replenishment. A human must review any order. This is an invented policy, not ERP or company guidance."},
+ {"id":"SYN-FIN-001","title":"Synthetic supplier review","keywords":["fornecedor","fornecedores","vencidas","faturas","financeiro"],"text":"Review unpaid overdue balances alongside open purchase orders for the same synthetic supplier. This is a review signal, not a credit rating or a recommendation to stop payments."}
+]
