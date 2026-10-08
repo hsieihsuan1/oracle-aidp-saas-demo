@@ -1,0 +1,10 @@
+const el=id=>document.getElementById(id);
+async function boot(){const response=await fetch('/api/catalog');const data=await response.json();for(const [name,n] of Object.entries(data.tables)){const span=document.createElement('span');span.textContent=name+' · '+n+' synthetic rows';el('catalog').append(span);}}
+el('run').addEventListener('click',async()=>{
+ el('run').disabled=true;el('error').textContent='';
+ try{const response=await fetch('/api/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question_id:el('question').value})});const data=await response.json();if(!response.ok)throw Error(data.detail);
+ el('results').hidden=false;el('source').textContent=data.source;el('asof').textContent='Frozen demo snapshot: '+data.as_of;el('question-title').textContent=data.question;el('answer').textContent=data.answer;el('sql').textContent=data.sql;
+ el('table').replaceChildren();if(data.rows.length){const fields=Object.keys(data.rows[0]);const head=document.createElement('tr');for(const field of fields){const th=document.createElement('th');th.textContent=field;head.append(th);}el('table').append(head);for(const row of data.rows){const tr=document.createElement('tr');for(const field of fields){const td=document.createElement('td');td.textContent=typeof row[field]==='number'?row[field].toLocaleString('en-US',{maximumFractionDigits:2}):row[field];tr.append(td);}el('table').append(tr);}}
+ el('policies').replaceChildren();for(const policy of data.policies){const div=document.createElement('div');div.className='policy';const title=document.createElement('strong');title.textContent=policy.id+' · '+policy.title;const text=document.createElement('p');text.textContent=policy.text;div.append(title,text);el('policies').append(div);}if(!data.policies.length)el('policies').textContent='No policy mapped for this scenario.';
+ }catch(error){el('error').textContent=error.message;}finally{el('run').disabled=false;}
+});boot().catch(e=>el('error').textContent=e.message);
